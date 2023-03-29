@@ -6,41 +6,61 @@ provider "aws" {
   }
 }
 
- resource "tls_private_key" "example" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+resource "aws_security_group" "http_access" {
+  name        = "http_access"
+  description = "Allow HTTP inbound traffic"
 
-resource "aws_key_pair" "terraform-demo" {
-  key_name   = "terraform-demo"
-  public_key = tls_private_key.example.public_key_openssh
-}
+  ingress {
+    description = "HTTP Access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
- resource "aws_instance" "terraform-instance" {
-  ami               = "ami-0c3157ff674c2918d"
-  instance_type     = "${var.instance_type}"
-  availability_zone = "us-east-1a"
-  key_name          = "${aws_key_pair.terraform-demo.key_name}"
-  user_data = <<EOF
-  #!/bin/bash
-  sudo apt-get update
-  sudo apt-get install -y apache2
-  sudo systemctl start apache2
-  sudo systemctl enable apache2
-  echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
-  EOF
+  ingress {
+    description = "SSH ACcess"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
-    Name = "terraform-instance"
+    Name = "http_access"
   }
 }
 
-module "website_s3_bucket" {
-  source      = "./modules/aws-s3-static-website-bucket"
-  count       = 1
-  bucket_name = "dhruv-garg-29-03-2023-${count.index}"
-  tags        = {
-		Terraform   = "True"
-		Environment = "Dev"
-		}
-}
+resource "aws_instance" "my_vm" {
+  ami           = "ami-0c3157ff674c2918d"
+  instance_type = "t2.micro"
 
+  key_name = "TestKP-Provisioner"
+  security_groups = [aws_security_group.http_access.name]
+
+  provisioner "file" {
+    source      = "./test-provisioner.txt"
+    destination = "/home/ubuntu/test-provisioner.txt"
+  }
+  
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 777 ./test-provisioner.txt"
+    ]
+  }
+
+  connection {
+    type        = "ssh"
+    host        = self.public_ip
+    user        = "ubuntu"
+    private_key = file("./TestKP-Provisioner.pem")
+    timeout     = "4m"
+  }
+}
