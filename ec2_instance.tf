@@ -39,11 +39,19 @@ resource "aws_security_group" "http_access" {
   }
 }
 
+data "aws_ami" "ec2_ami" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["app-*"]
+  }
+}
+
 resource "aws_instance" "tomcat_instance" {
-  ami             = "${var.instance_ami}"
+  ami             = "${data.aws_ami.ec2_ami.id}"
   instance_type   = "${var.instance_type}"
   key_name        = "${var.key_name}"
   subnet_id       = module.vpc.public_subnets[0]
   security_groups = [aws_security_group.http_access.id]
-  user_data       = "${file("install_tomcat.sh")}"
+  user_data       = templatefile("install_tomcat_template.tftpl", { tomcat_version = "9.0.74"})
 }
