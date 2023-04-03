@@ -34,13 +34,13 @@ resource "aws_key_pair" "terraform-demo" {
   }
 }
 
-module "website_s3_bucket" {
-  source      = "./modules/aws-s3-static-website-bucket"
-  count       = 1
-  bucket_name = "dhruv-garg-29-03-2023-${count.index}"
-  tags        = {
-		Terraform   = "True"
-		Environment = "Dev"
-		}
-}
+#module "website_s3_bucket" {
+#  source      = "./modules/aws-s3-static-website-bucket"
+#  count       = 1
+#  bucket_name = "dhruv-garg-29-03-2023-dev-${count.index}"
+#  tags        = {
+#		Terraform   = "True"
+#		Environment = "Dev"
+#		}
+#}
 
