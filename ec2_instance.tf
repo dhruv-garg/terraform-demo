@@ -10,7 +10,7 @@ resource "aws_security_group" "http_access" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   ingress {
     description = "Custom Tomcat Access"
     from_port   = 8080
