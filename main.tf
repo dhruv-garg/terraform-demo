@@ -1,4 +1,14 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.0.0"
+    }
+  }
+}
+
 provider "aws" {
+  region = "us-east-1"
   assume_role {
     role_arn     = "arn:aws:iam::430288206927:role/TerraformTestRole"
     session_name = "TestSession"
