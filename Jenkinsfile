@@ -7,10 +7,15 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         script {
-          sh '''
+          sh 
+          '''
             #!/bin/bash
-            output = 'terraform plan'
+            output=`terraform plan`
             echo $output
+            sub="No changes"
+            if [[ "$output" == *"$sub"* ]]; then
+              echo "Woahh"
+            fi
           '''
         }
       }
