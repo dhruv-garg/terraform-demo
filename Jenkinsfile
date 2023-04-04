@@ -12,7 +12,7 @@ pipeline {
             output=`terraform plan`
             echo $output
             sub="No changes"
-            if [[ "$output" == *"$sub"* ]]; then
+            if [[ $output == *"$sub"* ]]; then
               echo "Woahh"
             fi
           '''
