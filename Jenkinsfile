@@ -17,12 +17,6 @@ pipeline {
         sh 'terraform validate'
       }
     }
-
-    stage('Format') {
-      steps {
-        sh 'terraform fmt --recrusive'    
-      }
-    }
     
     stage('Planning') {
       steps {
