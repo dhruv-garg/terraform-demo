@@ -6,7 +6,7 @@ pipeline {
       AWS_CREDENTIALS=credentials('TerraformJenkinsDemoUser')
     }
     parameters {
-      choice choices: ['Plan', 'Apply', 'Destroy'], description: '', name: 'action'
+      choice choices: ['Apply', 'Destroy'], description: '', name: 'action'
     }
   stages {
     stage('Initialization') {
