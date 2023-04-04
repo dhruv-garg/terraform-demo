@@ -20,7 +20,7 @@ pipeline {
         script {
           sh 'terraform validate'
           sh 'terraform fmt -check'
-          exit_status = echo $#
+          exit_status = sh 'echo $#'
           if (exit_status == 1){
             exit 1
           }
