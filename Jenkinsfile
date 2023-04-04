@@ -5,8 +5,18 @@ pipeline {
     environment {
       AWS_ACCOUNT_ID="430288206927"
       AWS_DEFAULT_REGION="us-east-1"
+      AWS_CREDENTIALS=credentials('TerraformJenkinsDemoUser')
     }
   stages {
+    stage('Test') {
+      steps {
+        script {
+          sh 'echo $AWS_CREDENTIALS_USR'
+          sh 'echo $AWS_CREDENTIALS_PSW'
+        }
+      }
+    }
+
     stage('Initialization') {
       steps {
         script {
