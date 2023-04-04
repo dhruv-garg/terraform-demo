@@ -8,3 +8,7 @@ output "website_bucket_name" {
   value       = module.website_s3_bucket.*.name
 }
 
+output "aws_instance_id" {
+  description = "ID of AWS instance"
+  value       = aws_instance.terraform-instance.id
+}
