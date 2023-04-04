@@ -8,15 +8,6 @@ pipeline {
       AWS_CREDENTIALS=credentials('TerraformJenkinsDemoUser')
     }
   stages {
-    stage('Test') {
-      steps {
-        script {
-          sh 'echo $AWS_CREDENTIALS_USR'
-          sh 'echo $AWS_CREDENTIALS_PSW'
-        }
-      }
-    }
-
     stage('Initialization') {
       steps {
         script {
@@ -31,6 +22,7 @@ pipeline {
           sh 'terraform validate'
           sh 'terraform fmt -check'
           exit_status = sh 'echo $#'
+          sh 'echo $#'
           if (exit_status == 1){
             exit 1
           }
