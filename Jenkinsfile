@@ -9,9 +9,12 @@ pipeline {
         script {
 	  def output = sh(returnStdout: true, script: 'terraform plan')
           echo "Output: ${output}"
-          if (output == "*No changes*"){
+          if (output == *No changes*){
 	     echo "WOahh"
           }
+	  else {
+            echo "Else part"
+	  }
         }
       }
     }
