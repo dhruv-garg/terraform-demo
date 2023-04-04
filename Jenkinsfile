@@ -1,5 +1,3 @@
-def exit_status = 0
-
 pipeline {
   agent any
     environment {
@@ -17,30 +15,16 @@ pipeline {
     }
     
     stage('Validation') {
-        try {
-          sh 'terraform validate'
-          sh 'terraform fmt -check'
-        }
-      catch(err) {
-        currentBuild.result = 'FAILURE'
-        emailExtraMsg = "Build Failure:" + err.getMessage()
-        throw err
+      steps {
+        sh 'terraform validate'
+        sh 'terraform fmt -check'
       }
     }
     
     stage('Planning') {
       steps {
-        catchError {
+        script {
           sh 'terraform plan'
-        }
-      }
-      post {
-        success {
-          echo 'Plan Successful'
-        }
-        failure {
-          echo 'Terraform plan failed'
-          error 'Stopping now..'
         }
       }
     }
