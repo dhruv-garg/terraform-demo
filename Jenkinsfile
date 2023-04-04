@@ -8,24 +8,25 @@ pipeline {
   stages {
     stage('Initialization') {
       steps {
-        script {
-          sh 'terraform init'
-        }
+        sh 'terraform init'
       } 
     }
     
     stage('Validation') {
       steps {
         sh 'terraform validate'
-        sh 'terraform fmt -check'
+      }
+    }
+
+    stage('Format') {
+      steps {
+        sh 'terraform fmt --recrusive'    
       }
     }
     
     stage('Planning') {
       steps {
-        script {
-          sh 'terraform plan'
-        }
+        sh 'terraform plan'
       }
     }
 
@@ -34,9 +35,7 @@ pipeline {
         message "Do you want to proceed to apply the plan?"
       }
       steps {
-        script {
-          sh 'terraform apply -auto-approve'
-        }
+        sh 'terraform apply -auto-approve'
       }
     }
   }
