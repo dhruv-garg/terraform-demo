@@ -38,14 +38,21 @@ pipeline {
         }
       }
     }
+    
+    stage('View Infra') {
+      steps {
+        sh 'terraform show'
+      }
+    }
 
-    stage('Apply') {
+    stage('Final Action') {
       input {
         message "Do you want to proceed?"
       }
       steps {
         script {
           if(params.action == 'Destroy'){
+            sh "echo 'Destroying infra'"
             sh "terraform destroy"
           }
           else {
