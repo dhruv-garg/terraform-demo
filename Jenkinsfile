@@ -34,7 +34,7 @@ pipeline {
       steps {
         script {
           if(params.action == 'Destroy'){
-            sh "terraform destroy -input=false -auto-approve"
+            sh "terraform destroy"
           }
           else {
             sh "terraform apply -input=false -auto-approve"
