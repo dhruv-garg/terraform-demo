@@ -17,20 +17,14 @@ pipeline {
     }
     
     stage('Validation') {
-      steps {
-        catchError {
+        try {
           sh 'terraform validate'
           sh 'terraform fmt -check'
         }
-      }
-      post {
-        success {
-          echo 'Validation Successful'
-	}
-        failure {
-          echo 'Validation failed'
-          echo 'Stopping now'
-        }
+      catch(err) {
+        currentBuild.result = 'FAILURE'
+        emailExtraMsg = "Build Failure:" + err.getMessage()
+        throw err
       }
     }
     
