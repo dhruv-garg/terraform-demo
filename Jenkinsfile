@@ -18,14 +18,18 @@ pipeline {
     
     stage('Validation') {
       steps {
-        script {
+        catchError {
           sh 'terraform validate'
           sh 'terraform fmt -check'
-          exit_status = sh 'echo $#'
-          sh 'echo $#'
-          if (exit_status == 1){
-            exit 1
-          }
+        }
+      }
+      post {
+        success {
+          echo 'Validation Successful'
+	}
+        failure {
+          echo 'Validation failed'
+          echo 'Stopping now'
         }
       }
     }
@@ -42,7 +46,7 @@ pipeline {
         }
         failure {
           echo 'Terraform plan failed'
-          error('Stopping now..')
+          error 'Stopping now..'
         }
       }
     }
