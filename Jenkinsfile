@@ -7,8 +7,7 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         script {
-          sh 
-          '''
+          sh'''
             #!/bin/bash
             output=`terraform plan`
             echo $output
