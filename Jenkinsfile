@@ -52,7 +52,7 @@ pipeline {
       steps {
         script {
           if(params.action == 'Destroy'){
-            sh "echo 'Destroying infra'"
+            echo 'Destroying infra'
             sh "terraform destroy"
           }
           else {
