@@ -11,19 +11,31 @@ pipeline {
   stages {
     stage('Initialization') {
       steps {
-        sh 'terraform init'
+        script {
+          if (params.action != 'Destroy') {
+            sh 'terraform init'
+          }
+        }
       } 
     }
     
     stage('Validation') {
       steps {
-        sh 'terraform validate'
+        script {
+          if (params.action != 'Destroy') {
+	    sh 'terraform validate'
+	  }
+        }
       }
     }
     
     stage('Planning') {
       steps {
-        sh 'terraform plan'
+        script {
+          if (params.action != 'Destroy') {
+	    sh 'terraform plan'
+          }
+        }
       }
     }
 
