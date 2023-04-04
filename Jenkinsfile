@@ -7,7 +7,7 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         script {
-          sh './abc.sh'
+          sh './test_plan.sh'
         }
       }
     }
