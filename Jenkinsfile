@@ -4,11 +4,17 @@ pipeline {
       AWS_CREDENTIALS=credentials('TerraformJenkinsDemoUser')
     }
   stages {
-    stage('Terraform Plan') {
+    stage('Get Infra State') {
       steps {
-        script {
-          sh './test_plan.sh'
-        }
+        sh 'terraform plan --refresh-only'
+      }
+    }
+    stage('Sync Infra to State File') {
+      input {
+        message "Do you want to proceed?"
+      }
+      steps {
+        sh 'terraform apply --refresh-only --auto-approve'
       }
     }
   }

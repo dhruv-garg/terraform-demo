@@ -1,2 +1,2 @@
 # terraform-demo
-Branch to check if there is drift in terraform infrastructure
+Branch to automatically sync state file based on manual changes to infra
