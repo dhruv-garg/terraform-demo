@@ -6,7 +6,10 @@ pipeline {
   stages {
     stage('Get Infra State') {
       steps {
-        sh 'terraform plan --refresh-only'
+        script {
+          sh 'terraform init'
+          sh 'terraform plan --refresh-only'
+        }
       }
     }
     stage('Sync Infra to State File') {
