@@ -53,7 +53,7 @@ pipeline {
         script {
           if(params.action == 'Destroy'){
             echo 'Destroying infra'
-            sh "terraform destroy"
+            sh "terraform destroy -auto-approve"
           }
           else {
             sh "terraform apply -input=false -auto-approve"
